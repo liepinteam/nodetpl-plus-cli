@@ -6,6 +6,7 @@ template.es = (tpls, scripts) => `class CoreClass {
     this.scripts = {};
     this.datas = {};
     this._initTpls()._initScripts();
+    return this;
   }
 
   _generate() {

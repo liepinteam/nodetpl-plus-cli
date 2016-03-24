@@ -259,7 +259,7 @@ class NodeTplES {
       if (['commonjs', 'var', 'es'].indexOf(this.options.library) === -1) {
         throw new Error('"import" can only worked in commonjs, var and es mode.');
       }
-      html = cache.__libs.join('\n') + html;
+      html = cache.__libs.join('\n') + '\n\n' + html;
     }
     return html;
   }

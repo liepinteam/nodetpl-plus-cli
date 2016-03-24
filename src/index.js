@@ -5,6 +5,10 @@ import path from 'path';
 import fsPath from 'fs-path';
 import colors from 'colors/safe';
 import minimist from 'minimist';
+import {
+  js_beautify as beautify
+}
+from 'js-beautify';
 import NodeTplES from './NodeTplES';
 import {
   transform
@@ -16,6 +20,7 @@ let argv = minimist(process.argv.slice(2));
 let options = {
   path: '',
   extname: '.tpl',
+  es5: false,
   watch: false
 };
 // get path value
@@ -31,6 +36,10 @@ if (!path.isAbsolute(options.path)) {
 if (argv.extname) {
   options.extname = argv.extname;
 }
+// get es mode
+if (argv.es5) {
+  options.es5 = true;
+}
 // get watch mode
 if (argv.watch) {
   options.watch = true;
@@ -43,12 +52,13 @@ if (argv.h) {
   version: v${NodeTplES.version}
 
   grammar:
-    nodetpl-es-cli <path> --ext .tpl --watch
+    nodetpl-es-cli <path> --extname .tpl --es5 --watch
 
   arguments:
-    <path> : template file or directory path.
-    --ext  : the template extention name, default is ".tpl".
-    --watch: watch the file, automatically compile if changed.
+    <path>   : template file or directory path.
+    --extname: the template extention name, default is ".tpl".
+    --es5    : transform es6 code to es5, default is false.
+    --watch  : watch the file, automatically compile if changed.
 `);
   process.exit(0);
 }
@@ -57,6 +67,7 @@ if (argv.h) {
 console.log(`<?
   Hello, NodeTpl-ES
   extname: ${options.extname}
+  es5    : ${options.es5}
   watch  : ${options.watch}
   version: ${NodeTplES.version}
 ?>`);
@@ -85,6 +96,12 @@ class Tools {
 
   transform(data) {
     return new NodeTplES().compile(data);
+  }
+
+  beautify(data) {
+    return beautify(data, {
+      indent_size: 2
+    });
   }
 
   es5(data) {
@@ -126,7 +143,13 @@ class Tools {
     return Promise.resolve()
       .then(this.read.bind(this))
       .then(this.transform.bind(this))
-      .then(this.es5.bind(this))
+      .then(function(data) {
+        if (options.es5) {
+          return this.es5(data);
+        } else {
+          return this.beautify(data);
+        }
+      }.bind(this))
       .then(this.write.bind(this))
       .catch(function(err) {
         console.log(colors.bgRed('>> Compile Error: ' + this.filepath));
