@@ -2,18 +2,18 @@
 
 import template from './template';
 
-let version = '1.0.0';
+let version = '1.1.0';
 
 class NodeTplPlus {
-  constructor() {
+  constructor(options) {
     this.data = {};
     this.tpls = {};
     this.scripts = {};
-    this.options = {
+    this.options = Object.assign({
       openTag: '<?',
       closeTag: '?>',
-      library: 'es' // umd | amd | cmd | commonjs | var | es
-    };
+      library: 'commonjs' // umd | amd | cmd | commonjs | var | es
+    }, options);
     return this;
   }
 
@@ -24,11 +24,26 @@ class NodeTplPlus {
    * @return {Object}      an object resorted
    */
   _fetch(html) {
-    let cache = {},
-      jsExp = /<script\b[^>]*>([^<]*(?:(?!<\/script>)<[^<]*)*)<\/script>/igm,
-      cssExp = /<style\b[^>]*>([^<]*(?:(?!<\/style>)<[^<]*)*)<\/style>/igm,
-      list = this._template(html);
-    cache.__libs = html.match(/import\s+(?:.* from\s+)?(['"]).*\1\s*;/g);
+    let cache = {};
+    let jsExp = /<script\b[^>]*>([^<]*(?:(?!<\/script>)<[^<]*)*)<\/script>/igm;
+    let cssExp = /<style\b[^>]*>([^<]*(?:(?!<\/style>)<[^<]*)*)<\/style>/igm;
+    let getTemplate = function(html) {
+      let temp, list = {};
+      let regExp = /<template(?:.*name=['"]([^'"]+)*)?\b[^>]*>([^<]*(?:(?!<\/template>)<[^<]*)*)<\/template>/igm;
+      temp = html.replace(regExp, function(all, name, code) {
+        if (name) {
+          list[name] = code;
+        }
+        return '';
+      });
+      cache.__libs = {
+        _imports: temp.match(/import\s+(?:.* from\s+)?(['"]).*\1\s*;/g),
+        _requires: temp.match(/require\s*\(\s*(['"]).*\1\s*\)\s*;/g)
+      };
+      list.main = list.main || html;
+      return list;
+    };
+    let list = getTemplate(html);
     for (let tplname in list) {
       if (!Object.prototype.hasOwnProperty.call(list, tplname)) {
         continue;
@@ -40,8 +55,8 @@ class NodeTplPlus {
         continue;
       }
       htmlCode = htmlCode
-        .replace(cssExp, ($, $1) => (cssCode += '\n' + $1, ''))
-        .replace(jsExp, ($, $1) => (jsCode += '\n' + $1, ''));
+        .replace(cssExp, (all, code) => (cssCode += '\n' + code, ''))
+        .replace(jsExp, (all, code) => (jsCode += '\n' + code, ''));
       cache[tplname] = {
         css: this._css(cssCode.trim(), tplname),
         html: this._html(htmlCode.trim(), tplname),
@@ -49,24 +64,6 @@ class NodeTplPlus {
       };
     }
     return cache;
-  }
-
-  /**
-   * matching template file
-   * @method _template
-   * @param  {String}  html template code
-   * @return {Object}       template object with sigle template pipe
-   */
-  _template(html) {
-    let temp, list = {},
-      regExp = /<template(.*name=['"]([^'"]+)*)?\b[^>]*>([^<]*(?:(?!<\/template>)<[^<]*)*)<\/template>/igm;
-    while (temp = regExp.exec(html), temp !== null) {
-      if (temp[2]) {
-        list[temp[2]] = temp[3];
-      }
-    }
-    list.main = list.main || html;
-    return list;
   }
 
   /**
@@ -202,7 +199,8 @@ class NodeTplPlus {
   _compile(cache) {
     let html = '',
       tpls = [],
-      scripts = [];
+      scripts = [],
+      libs;
     for (let i in cache) {
       let temp;
       if (!Object.prototype.hasOwnProperty.call(cache, i) || i === '__libs') {
@@ -254,13 +252,17 @@ class NodeTplPlus {
     if (!template[this.options.library]) {
       throw new Error('library option invalid: ' + this.options.library);
     }
-    html = template[this.options.library](tpls, scripts);
-    if (cache.__libs !== null && Array.isArray(cache.__libs)) {
-      if (['commonjs', 'var', 'es'].indexOf(this.options.library) === -1) {
-        throw new Error('"import" can only worked in commonjs, var and es mode.');
+    libs = cache.__libs || {};
+    if (['amd', 'cmd'].includes(this.options.library)) {
+      if (Array.isArray(libs._imports) && libs._imports.length > 0) {
+        throw new Error('"import" was not supported on amd/cmd mode, you can use "require" instead.');
       }
-      html = cache.__libs.join('\n') + '\n\n' + html;
+    } else if (this.options.library === 'var') {
+      if (Array.isArray(libs._imports) && libs._imports.length > 0 || Array.isArray(libs._requires) && libs._requires.length > 0) {
+        throw new Error('"import", "require" was not supported on var mode.');
+      }
     }
+    html = template[this.options.library](tpls, scripts, libs);
     return html;
   }
 }

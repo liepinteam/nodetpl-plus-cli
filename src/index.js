@@ -20,7 +20,8 @@ let argv = minimist(process.argv.slice(2));
 let options = {
   path: '',
   extname: '.tpl',
-  es5: false,
+  transform: false,
+  library: 'commonjs',
   watch: false
 };
 // get path value
@@ -33,14 +34,30 @@ if (!path.isAbsolute(options.path)) {
   options.path = path.join(process.cwd(), options.path);
 }
 // get ext name
+if (argv.e) {
+  argv.extname = argv.e;
+}
 if (argv.extname) {
   options.extname = argv.extname;
 }
-// get es mode
-if (argv.es5) {
-  options.es5 = true;
+// get transform
+if (argv.t) {
+  argv.transform = argv.t;
+}
+if (argv.transform) {
+  options.transform = true;
+}
+// get library
+if (argv.l) {
+  argv.library = argv.l;
+}
+if (argv.library) {
+  options.library = argv.library;
 }
 // get watch mode
+if (argv.w) {
+  argv.watch = argv.w;
+}
 if (argv.watch) {
   options.watch = true;
 }
@@ -52,13 +69,14 @@ if (argv.h) {
   version: v${NodeTplPlus.version}
 
   grammar:
-    nodetpl-plus-cli <path> --extname .tpl --es5 --watch
+    nodetpl-plus-cli <path> --extname .tpl --transform --watch
 
   arguments:
-    <path>   : template file or directory path.
-    --extname: the template extention name, default is ".tpl".
-    --es5    : transform es6 code to es5, default is false.
-    --watch  : watch the file, automatically compile if changed.
+    <path>     : template file or directory path.
+    --extname  : -e, the template extention name, default is ".tpl".
+    --transform: -t, transform code to es5 happy, default is false.
+    --library  : -l, the output library, umd | amd | cmd | commonjs | var | es, default is commonjs
+    --watch    : -w, watch the file, automatically compile if changed.
 `);
   process.exit(0);
 }
@@ -66,10 +84,11 @@ if (argv.h) {
 // main start
 console.log(`<?
   Hello, NodeTpl-Plus
-  extname: ${options.extname}
-  es5    : ${options.es5}
-  watch  : ${options.watch}
-  version: ${NodeTplPlus.version}
+  extname  : ${options.extname}
+  transform: ${options.transform}
+  library  : ${options.library}
+  watch    : ${options.watch}
+  version  : ${NodeTplPlus.version}
 ?>`);
 
 /**
@@ -95,7 +114,9 @@ class Tools {
   }
 
   transform(data) {
-    return new NodeTplPlus().compile(data);
+    return new NodeTplPlus({
+      library: options.library
+    }).compile(data);
   }
 
   beautify(data) {
@@ -144,7 +165,7 @@ class Tools {
       .then(this.read.bind(this))
       .then(this.transform.bind(this))
       .then(function(data) {
-        if (options.es5) {
+        if (options.transform) {
           return this.es5(data);
         } else {
           return this.beautify(data);
