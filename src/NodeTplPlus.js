@@ -4,7 +4,7 @@ import template from './template';
 
 let version = '1.0.0';
 
-class NodeTplES {
+class NodeTplPlus {
   constructor() {
     this.data = {};
     this.tpls = {};
@@ -265,6 +265,6 @@ class NodeTplES {
   }
 }
 
-NodeTplES.version = version;
+NodeTplPlus.version = version;
 
-export default NodeTplES;
+export default NodeTplPlus;

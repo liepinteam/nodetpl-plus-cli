@@ -9,7 +9,7 @@ import {
   js_beautify as beautify
 }
 from 'js-beautify';
-import NodeTplES from './NodeTplES';
+import NodeTplPlus from './NodeTplPlus';
 import {
   transform
 }
@@ -47,12 +47,12 @@ if (argv.watch) {
 // help
 if (argv.h) {
   console.log(`
-<?  NodeTplES Precompile Tools  ?>
+<?  NodeTplPlus Precompile Tools  ?>
 
-  version: v${NodeTplES.version}
+  version: v${NodeTplPlus.version}
 
   grammar:
-    nodetpl-es-cli <path> --extname .tpl --es5 --watch
+    nodetpl-plus-cli <path> --extname .tpl --es5 --watch
 
   arguments:
     <path>   : template file or directory path.
@@ -65,11 +65,11 @@ if (argv.h) {
 
 // main start
 console.log(`<?
-  Hello, NodeTpl-ES
+  Hello, NodeTpl-Plus
   extname: ${options.extname}
   es5    : ${options.es5}
   watch  : ${options.watch}
-  version: ${NodeTplES.version}
+  version: ${NodeTplPlus.version}
 ?>`);
 
 /**
@@ -95,7 +95,7 @@ class Tools {
   }
 
   transform(data) {
-    return new NodeTplES().compile(data);
+    return new NodeTplPlus().compile(data);
   }
 
   beautify(data) {

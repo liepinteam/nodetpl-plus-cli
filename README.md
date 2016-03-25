@@ -1,11 +1,11 @@
-nodetpl-es-cli
+nodetpl-plus-cli
 ===
 
-[![Build Status](https://secure.travis-ci.org/pillys/nodetpl-es-cli.png?branch=master)](https://travis-ci.org/pillys/nodetpl-es-cli)
+[![Build Status](https://secure.travis-ci.org/pillys/nodetpl-plus-cli.png?branch=master)](https://travis-ci.org/pillys/nodetpl-plus-cli)
 
 A powerful, efficient, easy to use, funny JavaScript template engine.
 
-## Why use nodetpl-es-cli?
+## Why use nodetpl-plus-cli?
 
   * Free: Open source, free use under MIT license
   * Superior performance: Super-fast run, like lightning analytical efficiency
@@ -19,12 +19,12 @@ A powerful, efficient, easy to use, funny JavaScript template engine.
 
 ### Detailed documentation
 
-  Go to the official site: <http://www.nodetpl.com/nodetpl-es>
+  Go to the official site: <http://www.nodetpl.com/nodetpl-plus>
 
 ## Questions?
 
-If you have any questions, please feel free to ask through [New Issue](https://github.com/pillys/nodetpl-es-cli/issues/new).
+If you have any questions, please feel free to ask through [New Issue](https://github.com/pillys/nodetpl-plus-cli/issues/new).
 
 ### License
 
-  nodetpl-es-cli is available under the terms of the [MIT](LICENSE) License.
+  nodetpl-plus-cli is available under the terms of the [MIT](LICENSE) License.
