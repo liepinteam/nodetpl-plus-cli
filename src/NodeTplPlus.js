@@ -2,7 +2,7 @@
 
 import template from './template';
 
-let version = '1.1.0';
+let version = '1.2.0';
 
 class NodeTplPlus {
   constructor(options) {
@@ -28,19 +28,22 @@ class NodeTplPlus {
     let jsExp = /<script\b[^>]*>([^<]*(?:(?!<\/script>)<[^<]*)*)<\/script>/igm;
     let cssExp = /<style\b[^>]*>([^<]*(?:(?!<\/style>)<[^<]*)*)<\/style>/igm;
     let getTemplate = function(html) {
-      let temp, list = {};
+      let list = {};
       let regExp = /<template(?:.*name=['"]([^'"]+)*)?\b[^>]*>([^<]*(?:(?!<\/template>)<[^<]*)*)<\/template>/igm;
-      temp = html.replace(regExp, function(all, name, code) {
+      let temp = html.replace(regExp, function(all, name, code) {
         if (name) {
           list[name] = code;
         }
         return '';
       });
-      cache.__libs = {
-        _imports: temp.match(/import\s+(?:.* from\s+)?(['"]).*\1\s*;/g),
-        _requires: temp.match(/require\s*\(\s*(['"]).*\1\s*\)\s*;/g)
-      };
-      list.main = list.main || html;
+      if (list.main) {
+        cache.__libs = {
+          _imports: temp.match(/import\s+(?:.* from\s+)?(['"]).*\1\s*;/g),
+          _requires: temp.match(/require\s*\(\s*(['"]).*\1\s*\)\s*;/g)
+        };
+      } else {
+        list.main = html;
+      }
       return list;
     };
     let list = getTemplate(html);
