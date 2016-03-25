@@ -5,11 +5,11 @@ import path from 'path';
 import fsPath from 'fs-path';
 import colors from 'colors/safe';
 import minimist from 'minimist';
+import NodeTplPlus from 'nodetpl-plus';
 import {
   js_beautify as beautify
 }
 from 'js-beautify';
-import NodeTplPlus from './NodeTplPlus';
 import {
   transform
 }
