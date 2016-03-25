@@ -1,6 +1,6 @@
 {
   "name": "nodetpl-plus-cli",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A powerful, efficient, easy to use, funny JavaScript template engine.",
   "readmeFilename": "README.md",
   "keywords": [
@@ -36,7 +36,7 @@
     "colors": "^1.1.2",
     "fs-path": "0.0.22",
     "js-beautify": "^1.6.2",
-    "nodetpl-plus": "^1.2.2"
+    "nodetpl-plus": "^1.2.3"
   },
   "devDependencies": {},
   "babel": {
