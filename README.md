@@ -1,7 +1,7 @@
 nodetpl-plus-cli
 ===
 
-[![Build Status](https://secure.travis-ci.org/pillys/nodetpl-plus-cli.png?branch=master)](https://travis-ci.org/pillys/nodetpl-plus-cli)
+[![Build Status](https://secure.travis-ci.org/liepinteam/nodetpl-plus-cli.png?branch=master)](https://travis-ci.org/liepinteam/nodetpl-plus-cli)
 
 A powerful, efficient, easy to use, funny JavaScript template engine.
 
@@ -23,7 +23,7 @@ A powerful, efficient, easy to use, funny JavaScript template engine.
 
 ## Questions?
 
-If you have any questions, please feel free to ask through [New Issue](https://github.com/pillys/nodetpl-plus-cli/issues/new).
+If you have any questions, please feel free to ask through [New Issue](https://github.com/liepinteam/nodetpl-plus-cli/issues/new).
 
 ### License
 

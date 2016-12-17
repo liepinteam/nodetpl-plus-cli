@@ -1,6 +1,6 @@
 {
   "name": "nodetpl-plus-cli",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "A powerful, efficient, easy to use, funny JavaScript template engine.",
   "readmeFilename": "README.md",
   "keywords": [
@@ -20,13 +20,13 @@
   },
   "author": "pillys@163.com",
   "repository": {
-    "url": "https://github.com/pillys/nodetpl-plus-cli",
+    "url": "https://github.com/liepinteam/nodetpl-plus-cli",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/pillys/nodetpl-plus-cli/issues"
+    "url": "https://github.com/liepinteam/nodetpl-plus-cli/issues"
   },
-  "homepage": "https://github.com/pillys/nodetpl-plus-cli",
+  "homepage": "https://github.com/liepinteam/nodetpl-plus-cli",
   "dependencies": {
     "babel-cli": "^6.6.5",
     "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
